@@ -1,28 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AsistenciaService {
-  private apiUrl = 'http://localhost:3000/api/asistencia'; // Cambia esto luego por la URL de Render
+  private url = `${environment.apiBase}/asistencia`; // 👈 clave
 
   constructor(private http: HttpClient) {}
 
   getAll() {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(this.url);
   }
 
   getByFecha(fecha: string) {
-    return this.http.get<any[]>(`${this.apiUrl}/fecha/${fecha}`);
+    return this.http.get<any[]>(`${this.url}/fecha/${fecha}`);
   }
 
   getByEstudiante(id: number) {
-    return this.http.get<any[]>(`${this.apiUrl}/estudiante/${id}`);
+    return this.http.get<any[]>(`${this.url}/estudiante/${id}`);
   }
 
   getByFiltro(fecha?: string, estudianteId?: number) {
-    let url = `${this.apiUrl}/buscar?`;
-    if (fecha) url += `fecha=${fecha}&`;
-    if (estudianteId) url += `estudianteId=${estudianteId}`;
-    return this.http.get<any[]>(url);
+    let params = new HttpParams();
+    if (fecha) params = params.set('fecha', fecha);
+    if (estudianteId) params = params.set('estudianteId', String(estudianteId));
+    return this.http.get<any[]>(`${this.url}/buscar`, { params });
   }
 }

@@ -1,0 +1,7 @@
+{
+  "buildCommand": "ng build --configuration production",
+  "outputDirectory": "dist/asistencia-frontend",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
